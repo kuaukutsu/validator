@@ -2,6 +2,41 @@
 
 ## Example
 
+Rule validate
+```php
+$rule = new Boolean(1,0);
+
+// positive
+$violations = $rule->validate(1);
+$violations->hasViolations(); // <-- false
+
+// negative
+$violations = $rule->validate(true);
+$violations->hasViolations(); // <-- true
+
+$violations = $rule->validate('0');
+$violations->hasViolations(); // <-- true
+```
+
+Strict disable
+```php
+$rule = (new Boolean(1,0))
+    ->strictDisable();
+
+// positive
+$violations = $rule->validate(1);
+$violations->hasViolations(); // <-- false
+
+$violations = $rule->validate('0'); // cast to 0
+$violations->hasViolations(); // <-- false
+
+$violations = $rule->validate(true); // cast to 1
+$violations->hasViolations(); // <-- false
+
+$violations = $rule->validate('string'); // cast to 0
+$violations->hasViolations(); // <-- false
+```
+
 Simple value
 
 ```php
@@ -33,8 +68,7 @@ $validator = new Validator([
         new Type(Type::TYPE_INT)
     ),
     'name' => new RuleCollection(
-        new NotBlank(),
-        new Length(5,255)
+        (new Length(5,255))->skipOnEmpty(false)
     ),
 ]);
 
@@ -53,15 +87,17 @@ if ($violations->hasViolations()) {
 
 Array validate
 ```php
+$ruleString = new RuleCollection(
+    new NotBlank(),
+    new Length(5,255)
+)
+
 $validator = new Validator([
     'id' => new RuleCollection(
         new NotBlank(),
-        new Type(Type::TYPE_INT)
+        new Type('int')
     ),
-    'name' => new RuleCollection(
-        new NotBlank(),
-        new Length(5,255)
-    ),
+    'name' => $ruleString->skipOnError(true),
 ]);
 
 // validate
