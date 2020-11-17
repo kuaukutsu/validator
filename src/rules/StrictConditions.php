@@ -11,10 +11,15 @@ trait StrictConditions
      */
     private bool $strict = true;
 
-    public function strictDisable(): self
+    public function isStrict(): bool
+    {
+        return $this->strict;
+    }
+
+    public function strict(bool $value): self
     {
         $new = clone $this;
-        $new->strict = false;
+        $new->strict = $value;
 
         return $new;
     }

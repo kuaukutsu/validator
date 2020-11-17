@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace kuaukutsu\validator\rules;
 
-use kuaukutsu\validator\RuleBase;
-
 final class Type extends RuleBase
 {
     public const TYPE_NULL = 'null';
@@ -23,7 +21,7 @@ final class Type extends RuleBase
 
     private string $type;
 
-    private string $message = 'This value should be of type {{ type }}.';
+    private string $message = 'This value should be of type {type}.';
 
     public function __construct(string $type)
     {

@@ -15,5 +15,5 @@ interface Rule
      * @param bool $value if validation should be skipped if value validated is empty
      * @return self
      */
-    public function skipOnEmpty(bool $value): self;
+    public function skipOnEmpty(bool $value): Rule;
 }

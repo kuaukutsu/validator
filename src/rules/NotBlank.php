@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace kuaukutsu\validator\rules;
 
-use kuaukutsu\validator\RuleBase;
-
 final class NotBlank extends RuleBase
 {
     /**

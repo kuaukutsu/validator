@@ -21,7 +21,7 @@ $violations->hasViolations(); // <-- true
 Strict disable
 ```php
 $rule = (new Boolean(1,0))
-    ->strictDisable();
+    ->strict(false);
 
 // positive
 $violations = $rule->validate(1);
@@ -65,7 +65,8 @@ Object properties
 $validator = new Validator([
     'id' => new RuleCollection(
         new NotBlank(),
-        new Type(Type::TYPE_INT)
+        new Type(Type::TYPE_INT),
+        new GreaterThan(0)
     ),
     'name' => new RuleCollection(
         (new Length(5,255))->skipOnEmpty(false)
@@ -95,7 +96,8 @@ $ruleString = new RuleCollection(
 $validator = new Validator([
     'id' => new RuleCollection(
         new NotBlank(),
-        new Type('int')
+        new Type('int'),
+        new LessThan(100, true)
     ),
     'name' => $ruleString->skipOnError(true),
 ]);

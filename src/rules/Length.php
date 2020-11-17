@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace kuaukutsu\validator\rules;
 
-use kuaukutsu\validator\RuleBase;
-
 final class Length extends RuleBase
 {
     private int $min;
@@ -15,9 +13,9 @@ final class Length extends RuleBase
 
     private string $message = 'This value must be a string.';
 
-    private string $minMessage = 'This value is too short. It should have {{ limit }} character or more.';
+    private string $minMessage = 'This value is too short. It should have {limit} character or more.';
 
-    private string $maxMessage = 'This value is too long. It should have {{ limit }} character or less.';
+    private string $maxMessage = 'This value is too long. It should have {limit} character or less.';
 
     public function __construct(int $min = 0, int $max = 1, string $charset = 'UTF-8')
     {

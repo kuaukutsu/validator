@@ -35,7 +35,7 @@ class BooleanTest extends TestCase
     public function testValidateStrictMode(): void
     {
         $rule = (new Boolean(1,0))
-            ->strictDisable();
+            ->strict(false);
 
         // positive
         $violations = $rule->validate(1);

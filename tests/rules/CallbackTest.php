@@ -14,7 +14,7 @@ class CallbackTest extends TestCase
     public function testValidate(): void
     {
         $rule = new Callback(
-            fn(string $value): bool => $value !== 'test',
+            fn(string $value): bool => $value === 'test',
             'Description violation'
         );
 

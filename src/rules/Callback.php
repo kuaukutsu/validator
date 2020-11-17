@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace kuaukutsu\validator\rules;
 
-use kuaukutsu\validator\RuleBase;
-
 final class Callback extends RuleBase
 {
     /**
-     * @var callable TRUE, if an error occurred during validation of an value
+     * @var callable FALSE, if an error occurred during validation of an value
      */
     private $callback;
 
@@ -22,7 +20,7 @@ final class Callback extends RuleBase
 
     protected function validateValue($value): void
     {
-        if (($this->callback)($value)) {
+        if (!($this->callback)($value)) {
             $this->addViolation($this->message);
         }
     }

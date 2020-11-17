@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace kuaukutsu\validator;
+namespace kuaukutsu\validator\rules;
 
 use kuaukutsu\validator\exceptions\MethodCalledIncorrectlyException;
+use kuaukutsu\validator\Rule;
+use kuaukutsu\validator\Violation;
+use kuaukutsu\validator\ViolationCollection;
 
 abstract class RuleBase implements Rule
 {
-    private bool $skipOnEmpty = false;
+    use SkipConditions;
 
     private ?ViolationCollection $violations = null;
 
@@ -22,18 +25,6 @@ abstract class RuleBase implements Rule
         $className = static::class;
         /** @psalm-suppress PossiblyFalseOperand */
         return lcfirst(substr($className, strrpos($className, '\\') + 1));
-    }
-
-    /**
-     * @param bool $value if validation should be skipped if value validated is empty
-     * @return self
-     */
-    public function skipOnEmpty(bool $value): self
-    {
-        $new = clone $this;
-        $new->skipOnEmpty = $value;
-
-        return $new;
     }
 
     /**
