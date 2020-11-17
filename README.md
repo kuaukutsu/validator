@@ -90,6 +90,7 @@ Array validate
 ```php
 $ruleString = new RuleCollection(
     new NotBlank(),
+    new Type('string'),
     new Length(5,255)
 )
 

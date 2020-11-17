@@ -28,7 +28,7 @@ final class EqualTo extends CompareBase
                 return;
             }
 
-            if (!($baseValue === $comparedValue)) {
+            if ($baseValue !== $comparedValue) {
                 $this->addViolation($this->messageIdetical, [
                     'value' => $comparedValue
                 ]);
@@ -38,7 +38,7 @@ final class EqualTo extends CompareBase
         }
 
         /** @noinspection TypeUnsafeComparisonInspection */
-        if (!($baseValue == $comparedValue)) {
+        if ($baseValue != $comparedValue) {
             $this->addViolation($this->message, [
                 'value' => ($comparedValue instanceof DateTimeInterface)
                     ? $comparedValue->format('c')
