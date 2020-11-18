@@ -81,6 +81,37 @@ class ValidatorTest extends TestCase
         self::assertTrue($validator->validate($object)->hasViolations());
     }
 
+    public function testAddingRulesOneByOne(): void
+    {
+        $validator = new Validator();
+        $validator->addRule('id', new NotBlank());
+        $validator->addRule('id', new Type('int'));
+
+        $object = new Entity(1, '');
+
+        // positive
+        self::assertFalse($validator->validate($object)->hasViolations());
+
+        $validator->addRule('name', new NotBlank()); // <-- NotBlank
+        $validator->addRule('name', new Type('string'));
+
+        // negative
+        self::assertTrue($validator->validate($object)->hasViolations());
+    }
+
+    public function testAddingRulesInvalidArgumentException(): void
+    {
+        $validator = new Validator(
+            new RuleCollection(
+                new NotBlank()
+            )
+        );
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $validator->addRule('id', new Boolean());
+    }
+
     public function testArraySimple(): void
     {
         $validator = new Validator(

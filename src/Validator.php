@@ -19,9 +19,22 @@ final class Validator
      * Validator constructor.
      * @param RuleAggregate|iterable<string, RuleAggregate> $rules
      */
-    public function __construct(iterable $rules)
+    public function __construct(iterable $rules = [])
     {
         $this->rules = $rules;
+    }
+
+    public function addRule(string $attributeName, Rule $rule): void
+    {
+        if ($this->rules instanceof RuleAggregate) {
+            throw new InvalidArgumentException('This type of Validator cannot be extended.');
+        }
+
+        if (!isset($this->rules[$attributeName])) {
+            $this->rules[$attributeName] = new RuleCollection($rule);
+        }
+
+        $this->rules[$attributeName]->attach($rule);
     }
 
     /**
