@@ -11,13 +11,13 @@ use kuaukutsu\validator\exceptions\UnknownPropertyException;
 final class Validator
 {
     /**
-     * @var RuleCollection|iterable<string, RuleCollection>
+     * @var RuleAggregate|iterable<string, RuleAggregate>
      */
     private iterable $rules;
 
     /**
      * Validator constructor.
-     * @param RuleCollection|iterable<string, RuleCollection> $rules
+     * @param RuleAggregate|iterable<string, RuleAggregate> $rules
      */
     public function __construct(iterable $rules)
     {
@@ -41,8 +41,8 @@ final class Validator
             }
         }
 
-        if (!$this->rules instanceof RuleCollection) {
-            throw new InvalidArgumentException('Rules must be implement RuleCollection');
+        if (!$this->rules instanceof RuleAggregate) {
+            throw new InvalidArgumentException('Rules must be implement RulesBlock');
         }
 
         return $this->validateValue($value, $this->rules);
@@ -50,7 +50,7 @@ final class Validator
 
     /**
      * @param object $object
-     * @param iterable<string, RuleCollection> $rules
+     * @param iterable<string, RuleAggregate> $rules
      * @return ViolationCollection
      */
     private function validateObject(object $object, iterable $rules): ViolationCollection
@@ -76,7 +76,7 @@ final class Validator
 
     /**
      * @param array $value
-     * @param iterable<string, RuleCollection> $rules
+     * @param iterable<string, RuleAggregate> $rules
      * @return ViolationCollection
      */
     private function validateArray(array $value, iterable $rules): ViolationCollection
@@ -102,10 +102,10 @@ final class Validator
 
     /**
      * @param mixed $value
-     * @param RuleCollection $rules
+     * @param RuleAggregate $rules
      * @return ViolationCollection
      */
-    private function validateValue($value, RuleCollection $rules): ViolationCollection
+    private function validateValue($value, RuleAggregate $rules): ViolationCollection
     {
         $violations = new ViolationCollection();
 

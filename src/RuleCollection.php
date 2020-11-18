@@ -5,7 +5,7 @@ namespace kuaukutsu\validator;
 
 use kuaukutsu\ds\collection\Collection;
 
-final class RuleCollection extends Collection
+final class RuleCollection extends Collection implements RuleAggregate
 {
     /**
      * @var bool by default, if an error occurred during validation of an attribute,
@@ -27,10 +27,10 @@ final class RuleCollection extends Collection
         return $this->skipOnError;
     }
 
-    public function skipOnError(bool $skipOnError): self
+    public function skipOnError(bool $value): self
     {
         $collection = clone $this;
-        $collection->skipOnError = $skipOnError;
+        $collection->skipOnError = $value;
 
         return $collection;
     }

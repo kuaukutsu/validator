@@ -6,9 +6,12 @@ use kuaukutsu\validator\exceptions\ArrayKeyExistsException;
 use kuaukutsu\validator\exceptions\InvalidArgumentException;
 use kuaukutsu\validator\exceptions\UnknownPropertyException;
 use kuaukutsu\validator\rules\Boolean;
+use kuaukutsu\validator\rules\GreaterThan;
+use kuaukutsu\validator\rules\Type;
 use kuaukutsu\validator\tests\data\Entity;
 use kuaukutsu\validator\RuleCollection;
 use kuaukutsu\validator\rules\NotBlank;
+use kuaukutsu\validator\tests\data\SkipOnErrorAggregate;
 use kuaukutsu\validator\Validator;
 use PHPUnit\Framework\TestCase;
 
@@ -45,6 +48,21 @@ class ValidatorTest extends TestCase
 
         $validator = new Validator($rules->skipOnError(true));
         self::assertCount(1, $validator->validate(''), 'There must be one (first) violation: is Blank');
+    }
+
+    public function testSkipOnErrorAggregate(): void
+    {
+        $validator = new Validator(
+            new SkipOnErrorAggregate(
+                new NotBlank(),
+                new Type(Type::TYPE_INT),
+                new GreaterThan(5)
+            )
+        );
+
+        self::assertCount(1, $validator->validate(''), 'There must be one (first) violation: is Blank');
+
+        self::assertCount(1, $validator->validate(4), 'There must be one (first) violation: is GreaterThan');
     }
 
     public function testValueProperties(): void
