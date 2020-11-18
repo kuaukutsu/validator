@@ -24,9 +24,14 @@ final class Validator
         $this->rules = $rules;
     }
 
+    /**
+     * @param string $attributeName
+     * @param Rule $rule
+     * @throws InvalidArgumentException
+     */
     public function addRule(string $attributeName, Rule $rule): void
     {
-        if ($this->rules instanceof RuleAggregate) {
+        if (!is_array($this->rules)) {
             throw new InvalidArgumentException('This type of Validator cannot be extended.');
         }
 
@@ -34,6 +39,7 @@ final class Validator
             $this->rules[$attributeName] = new RuleCollection($rule);
         }
 
+        /** @psalm-suppress UndefinedInterfaceMethod */
         $this->rules[$attributeName]->attach($rule);
     }
 
@@ -115,17 +121,27 @@ final class Validator
 
     /**
      * @param mixed $value
-     * @param RuleAggregate $rules
+     * @param RuleAggregate|array<Rule> $rules
      * @return ViolationCollection
      */
-    private function validateValue($value, RuleAggregate $rules): ViolationCollection
+    private function validateValue($value, iterable $rules): ViolationCollection
     {
         $violations = new ViolationCollection();
 
+        /**
+         * Если допускаем что правила могут быть описаны ассоциативным массивом (не RuleAggregate),
+         * то единственная привязка это проверка isSkipOnError
+         */
+
+        $isSkipOnError = false;
+        if ($rules instanceof RuleAggregate) {
+            $isSkipOnError = $rules->isSkipOnError();
+        }
+
         /** @var Rule $rule */
         foreach ($rules as $rule) {
-            if ($rules->isSkipOnError() && $violations->hasViolations()) {
-                break;
+            if ($isSkipOnError && $violations->hasViolations()) {
+                return $violations;
             }
 
             $validate = $rule->validate($value);
