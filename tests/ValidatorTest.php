@@ -81,28 +81,6 @@ class ValidatorTest extends TestCase
         self::assertTrue($validator->validate($object)->hasViolations());
     }
 
-    /**
-     * Данный тест только для примера, что от Collection можно отказаться и перейти на массивы.
-     *
-     * @psalm-suppress InvalidArgument
-     */
-    public function testValuePropertiesWithoutRuleAggregate(): void
-    {
-        $validator = new Validator([
-            'id' => [
-                new NotBlank()
-            ],
-            'name' => [
-                new NotBlank()
-            ],
-        ]);
-
-        $object = new Entity(1, '');
-
-        self::assertTrue($validator->validate($object)->hasViolations());
-    }
-
-
     public function testAddingRulesOneByOne(): void
     {
         $validator = new Validator();

@@ -121,26 +121,16 @@ final class Validator
 
     /**
      * @param mixed $value
-     * @param RuleAggregate|array<Rule> $rules
+     * @param RuleAggregate $rules
      * @return ViolationCollection
      */
-    private function validateValue($value, iterable $rules): ViolationCollection
+    private function validateValue($value, RuleAggregate $rules): ViolationCollection
     {
         $violations = new ViolationCollection();
 
-        /**
-         * Если допускаем что правила могут быть описаны ассоциативным массивом (не RuleAggregate),
-         * то единственная привязка это проверка isSkipOnError
-         */
-
-        $isSkipOnError = false;
-        if ($rules instanceof RuleAggregate) {
-            $isSkipOnError = $rules->isSkipOnError();
-        }
-
         /** @var Rule $rule */
         foreach ($rules as $rule) {
-            if ($isSkipOnError && $violations->hasViolations()) {
+            if ($rules->isSkipOnError() && $violations->hasViolations()) {
                 return $violations;
             }
 
