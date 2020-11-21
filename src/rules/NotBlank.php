@@ -19,7 +19,26 @@ final class NotBlank extends RuleBase
     public function __construct(callable $assertEmpty = null)
     {
         /** @psalm-suppress MissingClosureParamType */
-        $this->assertEmpty = $assertEmpty ?? fn($value): bool => $this->isEmpty($value);
+        $this->assertEmpty = $assertEmpty ?? fn($value): bool => $this->checkOnEmpty($value);
+    }
+
+    public function message(string $message): self
+    {
+        $self = clone $this;
+        $self->message = $message;
+
+        return $self;
+    }
+
+    /**
+     * Отключаем игнорирование проверки на пустое значение (skipOnEmpty).
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    protected function isEmpty($value): bool
+    {
+        return false;
     }
 
     /**
@@ -30,5 +49,18 @@ final class NotBlank extends RuleBase
         if (($this->assertEmpty)($value)) {
             $this->addViolation($this->message);
         }
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    private function checkOnEmpty($value): bool
+    {
+        if (is_string($value)) {
+            $value = trim($value);
+        }
+
+        return $value === null || $value === '' || $value === [];
     }
 }

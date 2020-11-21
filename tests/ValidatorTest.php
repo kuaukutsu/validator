@@ -11,7 +11,6 @@ use kuaukutsu\validator\rules\Type;
 use kuaukutsu\validator\tests\data\Entity;
 use kuaukutsu\validator\RuleCollection;
 use kuaukutsu\validator\rules\NotBlank;
-use kuaukutsu\validator\tests\data\SkipOnErrorAggregate;
 use kuaukutsu\validator\Validator;
 use PHPUnit\Framework\TestCase;
 
@@ -36,24 +35,50 @@ class ValidatorTest extends TestCase
         self::assertCount(2, $validator->validate(''), 'There must be two violations: is Blank & not Boolean');
     }
 
-    public function testSkipOnError(): void
+    public function testSkipOnEmpty(): void
     {
-        $rules = new RuleCollection(
-            new NotBlank(),
-            new Boolean(1, 0)
-        );
+        $rules = RuleCollection::skipOnEmpty();
+        $rules->attach(new Type('bool'));
+        $rules->attach(new Boolean(true, false));
 
         $validator = new Validator($rules);
-        self::assertCount(2, $validator->validate(''), 'There must be two violations: is Blank & not Boolean');
 
-        $validator = new Validator($rules->skipOnError(true));
+        self::assertTrue($validator->validate('0')->hasViolations());
+
+        self::assertFalse($validator->validate(true)->hasViolations());
+
+        self::assertFalse($validator->validate('')->hasViolations(), 'There must be skip on empty');
+    }
+
+    public function testSkipOnEmptyAggregate(): void
+    {
+        $validator = new Validator(
+            RuleCollection::skipOnEmpty(
+                new Type(Type::TYPE_INT),
+                new GreaterThan(5)
+            )
+        );
+
+        self::assertFalse($validator->validate('')->hasViolations(), 'There must be skip on empty');
+
+        self::assertCount(1, $validator->validate(4), 'There must be one violation: is GreaterThan');
+    }
+
+    public function testSkipOnError(): void
+    {
+        $rules = RuleCollection::skipOnError();
+        $rules->attach(new NotBlank());
+        $rules->attach(new Boolean(1, 0));
+
+        $validator = new Validator($rules);
+
         self::assertCount(1, $validator->validate(''), 'There must be one (first) violation: is Blank');
     }
 
     public function testSkipOnErrorAggregate(): void
     {
         $validator = new Validator(
-            new SkipOnErrorAggregate(
+            RuleCollection::skipOnError(
                 new NotBlank(),
                 new Type(Type::TYPE_INT),
                 new GreaterThan(5)

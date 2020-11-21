@@ -13,8 +13,19 @@ interface RuleAggregate extends CollectionInterface
     public function isSkipOnError(): bool;
 
     /**
-     * @param bool $value
+     * @param Rule ...$items
      * @return static
      */
-    public function skipOnError(bool $value): self;
+    public static function skipOnError(...$items): self;
+
+    /**
+     * @return bool
+     */
+    public function isSkipOnEmpty(): bool;
+
+    /**
+     * @param Rule ...$items
+     * @return static
+     */
+    public static function skipOnEmpty(...$items): self;
 }

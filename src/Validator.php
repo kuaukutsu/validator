@@ -134,7 +134,10 @@ final class Validator implements ValidatorInterface
                 return $violations;
             }
 
-            $validate = $rule->validate($value);
+            $validate = $rule
+                ->skipOnEmpty($rules->isSkipOnEmpty())
+                ->validate($value);
+
             if ($validate->hasViolations()) {
                 $violations->merge($validate);
             }

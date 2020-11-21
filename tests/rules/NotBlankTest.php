@@ -35,4 +35,13 @@ class NotBlankTest extends TestCase
         $violations = $rule->validate('empty');
         self::assertTrue($violations->hasViolations());
     }
+
+    public function testValidateSkipOnEmpty(): void
+    {
+        $rule = (new NotBlank())->skipOnEmpty(true);
+
+        // negative
+        $violations = $rule->validate('');
+        self::assertTrue($violations->hasViolations());
+    }
 }

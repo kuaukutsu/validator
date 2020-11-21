@@ -14,6 +14,11 @@ use kuaukutsu\ds\collection\Collection;
 final class RuleCollection extends Collection implements RuleAggregate
 {
     /**
+     * @var bool if validation should be skipped if value validated is empty
+     */
+    private bool $skipOnEmpty = false;
+
+    /**
      * @var bool by default, if an error occurred during validation of an attribute,
      * further rules for this attribute are skipped.
      */
@@ -28,15 +33,36 @@ final class RuleCollection extends Collection implements RuleAggregate
         return Rule::class;
     }
 
+    public function isSkipOnEmpty(): bool
+    {
+        return $this->skipOnEmpty;
+    }
+
+    /**
+     * @param Rule ...$items
+     * @return static
+     */
+    public static function skipOnEmpty(...$items): self
+    {
+        $collection = new self(...$items);
+        $collection->skipOnEmpty = true;
+
+        return $collection;
+    }
+
     public function isSkipOnError(): bool
     {
         return $this->skipOnError;
     }
 
-    public function skipOnError(bool $value): self
+    /**
+     * @param Rule ...$items
+     * @return static
+     */
+    public static function skipOnError(...$items): self
     {
-        $collection = clone $this;
-        $collection->skipOnError = $value;
+        $collection = new self(...$items);
+        $collection->skipOnError = true;
 
         return $collection;
     }
