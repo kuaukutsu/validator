@@ -12,11 +12,11 @@ final class ViolationPrintf
 {
     private int $flags;
 
-    private ViolationCollection $collection;
+    private ViolationAggregate $collection;
 
     private const FLAG_FILTER_ATTRIBUTE_NAME = 1;
 
-    public function __construct(ViolationCollection $collection, int $flags = 0)
+    public function __construct(ViolationAggregate $collection, int $flags = 0)
     {
         $this->flags = $flags;
         $this->collection = $collection;

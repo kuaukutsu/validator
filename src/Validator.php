@@ -8,7 +8,7 @@ use kuaukutsu\validator\exceptions\ArrayKeyExistsException;
 use kuaukutsu\validator\exceptions\InvalidArgumentException;
 use kuaukutsu\validator\exceptions\UnknownPropertyException;
 
-final class Validator
+final class Validator implements ValidatorInterface
 {
     /**
      * @var RuleAggregate|iterable<string, RuleAggregate>
@@ -45,10 +45,10 @@ final class Validator
 
     /**
      * @param mixed $value
-     * @return ViolationCollection
+     * @return ViolationAggregate
      * @throws InvalidArgumentException
      */
-    public function validate($value): ViolationCollection
+    public function validate($value): ViolationAggregate
     {
         if (is_array($this->rules)) {
             if (is_object($value)) {
@@ -70,9 +70,9 @@ final class Validator
     /**
      * @param object $object
      * @param iterable<string, RuleAggregate> $rules
-     * @return ViolationCollection
+     * @return ViolationAggregate
      */
-    private function validateObject(object $object, iterable $rules): ViolationCollection
+    private function validateObject(object $object, iterable $rules): ViolationAggregate
     {
         $violations = new ViolationCollection();
 
@@ -96,9 +96,9 @@ final class Validator
     /**
      * @param array $value
      * @param iterable<string, RuleAggregate> $rules
-     * @return ViolationCollection
+     * @return ViolationAggregate
      */
-    private function validateArray(array $value, iterable $rules): ViolationCollection
+    private function validateArray(array $value, iterable $rules): ViolationAggregate
     {
         $violations = new ViolationCollection();
 
@@ -122,9 +122,9 @@ final class Validator
     /**
      * @param mixed $value
      * @param RuleAggregate $rules
-     * @return ViolationCollection
+     * @return ViolationAggregate
      */
-    private function validateValue($value, RuleAggregate $rules): ViolationCollection
+    private function validateValue($value, RuleAggregate $rules): ViolationAggregate
     {
         $violations = new ViolationCollection();
 
