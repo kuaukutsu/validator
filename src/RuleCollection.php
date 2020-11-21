@@ -5,6 +5,12 @@ namespace kuaukutsu\validator;
 
 use kuaukutsu\ds\collection\Collection;
 
+/**
+ * Class RuleCollection
+ *
+ * @psalm-return iterable<Rule>
+ * @method getIterator(): \ArrayIterator
+ */
 final class RuleCollection extends Collection implements RuleAggregate
 {
     /**

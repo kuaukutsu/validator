@@ -39,7 +39,7 @@ final class Validator
             $this->rules[$attributeName] = new RuleCollection($rule);
         }
 
-        /** @psalm-suppress UndefinedInterfaceMethod */
+        /** @psalm-suppress MissingThrowsDocblock */
         $this->rules[$attributeName]->attach($rule);
     }
 

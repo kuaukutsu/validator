@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace kuaukutsu\validator\rules;
 
+use kuaukutsu\validator\exceptions\InvalidArgumentException;
+
 final class Length extends RuleBase
 {
     private int $min;
@@ -10,8 +12,6 @@ final class Length extends RuleBase
     private int $max;
 
     private string $charset;
-
-    private string $message = 'This value must be a string.';
 
     private string $minMessage = 'This value is too short. It should have {limit} character or more.';
 
@@ -24,14 +24,30 @@ final class Length extends RuleBase
         $this->charset = $charset;
     }
 
+    public function minMessage(string $message): self
+    {
+        $self = clone $this;
+        $self->minMessage = $message;
+
+        return $self;
+    }
+
+    public function maxMessage(string $message): self
+    {
+        $self = clone $this;
+        $self->maxMessage = $message;
+
+        return $self;
+    }
+
     /**
      * @param mixed $value
+     * @throws InvalidArgumentException
      */
     protected function validateValue($value): void
     {
         if (!is_string($value)) {
-            $this->addViolation($this->message);
-            return;
+            throw new InvalidArgumentException('This value must be a string.');
         }
 
         $length = mb_strlen($value, $this->charset);

@@ -30,6 +30,14 @@ final class Boolean extends RuleBase
         $this->falseValue = $falseValue;
     }
 
+    public function message(string $message): self
+    {
+        $self = clone $this;
+        $self->message = $message;
+
+        return $self;
+    }
+
     /**
      * @param mixed $value
      */

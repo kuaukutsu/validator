@@ -5,7 +5,13 @@ namespace kuaukutsu\validator;
 
 use kuaukutsu\ds\collection\Collection;
 
-final class ViolationCollection extends Collection
+/**
+ * Class ViolationCollection
+ *
+ * @psalm-return iterable<Violation>
+ * @method getIterator(): \ArrayIterator
+ */
+final class ViolationCollection extends Collection implements ViolationAggregate
 {
     /**
      * @psalm-return class-string
@@ -19,5 +25,23 @@ final class ViolationCollection extends Collection
     public function hasViolations(): bool
     {
         return $this->count() > 0;
+    }
+
+    public function getFirstViolation(): string
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $iterator = clone $this->getIterator();
+        $iterator->rewind();
+
+        return (string)$iterator->current();
+    }
+
+    public function getLastViolation(): string
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $iterator = clone $this->getIterator();
+        $iterator->seek(count($iterator) - 1);
+
+        return (string)$iterator->current();
     }
 }

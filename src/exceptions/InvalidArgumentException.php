@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 namespace kuaukutsu\validator\exceptions;
 
-final class InvalidArgumentException extends RuntimeException
+final class InvalidArgumentException extends \InvalidArgumentException
 {
 }

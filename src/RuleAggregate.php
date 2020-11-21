@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace kuaukutsu\validator;
 
-use Ds\Collection;
+use kuaukutsu\ds\collection\CollectionInterface;
 
-interface RuleAggregate extends Collection
+interface RuleAggregate extends CollectionInterface
 {
     /**
      * @return bool

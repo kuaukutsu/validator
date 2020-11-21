@@ -31,20 +31,12 @@ final class ViolationPrintf
 
     public function getFirstViolation(): string
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $iterator = clone $this->collection->getIterator();
-        $iterator->rewind();
-
-        return (string)$iterator->current();
+        return $this->collection->getFirstViolation();
     }
 
     public function getLastViolation(): string
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $iterator = clone $this->collection->getIterator();
-        $iterator->seek(count($iterator) - 1);
-
-        return (string)$iterator->current();
+        return $this->collection->getLastViolation();
     }
 
     /**
