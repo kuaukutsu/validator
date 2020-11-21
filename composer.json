@@ -18,7 +18,7 @@
     "require": {
         "ext-json": "*",
         "php": ">=7.4",
-        "kuaukutsu/ds-collection": "^1.0.3"
+        "kuaukutsu/ds-collection": "^1.0.2"
     },
 
     "require-dev": {
