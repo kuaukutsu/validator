@@ -37,7 +37,7 @@ class ValidatorTest extends TestCase
 
     public function testSkipOnEmpty(): void
     {
-        $rules = RuleCollection::skipOnEmpty();
+        $rules = RuleCollection::instance()->skipOnEmpty(true);
         $rules->attach(new Type('bool'));
         $rules->attach(new Boolean(true, false));
 
@@ -53,7 +53,8 @@ class ValidatorTest extends TestCase
     public function testSkipOnEmptyAggregate(): void
     {
         $validator = new Validator(
-            RuleCollection::skipOnEmpty(
+            RuleCollection::instance(
+                RuleCollection::OPTION_SKIP_ON_EMPTY,
                 new Type(Type::TYPE_INT),
                 new GreaterThan(5)
             )
@@ -66,7 +67,7 @@ class ValidatorTest extends TestCase
 
     public function testSkipOnError(): void
     {
-        $rules = RuleCollection::skipOnError();
+        $rules = RuleCollection::instance()->skipOnError(true);
         $rules->attach(new NotBlank());
         $rules->attach(new Boolean(1, 0));
 
@@ -78,7 +79,8 @@ class ValidatorTest extends TestCase
     public function testSkipOnErrorAggregate(): void
     {
         $validator = new Validator(
-            RuleCollection::skipOnError(
+            RuleCollection::instance(
+                RuleCollection::OPTION_SKIP_ON_ERROR,
                 new NotBlank(),
                 new Type(Type::TYPE_INT),
                 new GreaterThan(5)
@@ -111,6 +113,29 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validator->addRule('id', new NotBlank());
         $validator->addRule('id', new Type('int'));
+
+        $object = new Entity(1, '');
+
+        // positive
+        self::assertFalse($validator->validate($object)->hasViolations());
+
+        $validator->addRule('name', new NotBlank()); // <-- NotBlank
+        $validator->addRule('name', new Type('string'));
+
+        // negative
+        self::assertTrue($validator->validate($object)->hasViolations());
+    }
+
+    public function testAddingRuleAggregateByOne(): void
+    {
+        $validator = new Validator();
+        $validator->addRules('id',
+            RuleCollection::instance(
+                RuleCollection::OPTION_NONE,
+                new NotBlank(),
+                new Type('int')
+            )
+        );
 
         $object = new Entity(1, '');
 

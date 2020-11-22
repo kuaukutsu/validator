@@ -33,19 +33,35 @@ final class RuleCollection extends Collection implements RuleAggregate
         return Rule::class;
     }
 
+    public static function instance(int $options = 0, ...$items): self
+    {
+        $collection = new self(...$items);
+
+        if ($options & self::OPTION_SKIP_ON_EMPTY) {
+            $collection->skipOnEmpty = true;
+        }
+
+        if ($options & self::OPTION_SKIP_ON_ERROR) {
+            $collection->skipOnError = true;
+        }
+
+        return $collection;
+    }
+
+
     public function isSkipOnEmpty(): bool
     {
         return $this->skipOnEmpty;
     }
 
     /**
-     * @param Rule ...$items
+     * @param bool $value
      * @return static
      */
-    public static function skipOnEmpty(...$items): self
+    public function skipOnEmpty(bool $value): self
     {
-        $collection = new self(...$items);
-        $collection->skipOnEmpty = true;
+        $collection = clone $this;
+        $collection->skipOnEmpty = $value;
 
         return $collection;
     }
@@ -56,13 +72,13 @@ final class RuleCollection extends Collection implements RuleAggregate
     }
 
     /**
-     * @param Rule ...$items
+     * @param bool $value
      * @return static
      */
-    public static function skipOnError(...$items): self
+    public function skipOnError(bool $value): self
     {
-        $collection = new self(...$items);
-        $collection->skipOnError = true;
+        $collection = clone $this;
+        $collection->skipOnError = $value;
 
         return $collection;
     }

@@ -6,9 +6,9 @@ namespace kuaukutsu\validator\rules;
 final class Type extends RuleBase
 {
     public const TYPE_NULL = 'null';
-    public const TYPE_BOOL = 'bool';
+    public const TYPE_BOOL = 'boolean';
     public const TYPE_STRING = 'string';
-    public const TYPE_INT = 'int';
+    public const TYPE_INT = 'integer';
     public const TYPE_NUMBER = 'numeric';
     public const TYPE_FLOAT = 'float';
     public const TYPE_ARRAY = 'array';
@@ -46,7 +46,7 @@ final class Type extends RuleBase
         $funcMap = [
             'null' => 'is_null',
             'bool' => 'is_bool',
-            'bollean' => 'is_bool',
+            'boolean' => 'is_bool',
             'str' => 'is_string',
             'string' => 'is_string',
             'int' => 'is_int',

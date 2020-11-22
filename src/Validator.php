@@ -36,11 +36,30 @@ final class Validator implements ValidatorInterface
         }
 
         if (!isset($this->rules[$attributeName])) {
-            $this->rules[$attributeName] = new RuleCollection($rule);
+            $this->rules[$attributeName] = new RuleCollection();
         }
 
         /** @psalm-suppress MissingThrowsDocblock */
         $this->rules[$attributeName]->attach($rule);
+    }
+
+    /**
+     * @param string $attributeName
+     * @param RuleAggregate $rules
+     * @throws InvalidArgumentException
+     */
+    public function addRules(string $attributeName, RuleAggregate $rules): void
+    {
+        if (!is_array($this->rules)) {
+            throw new InvalidArgumentException('This type of Validator cannot be extended.');
+        }
+
+        if (!isset($this->rules[$attributeName])) {
+            $this->rules[$attributeName] = new RuleCollection();
+        }
+
+        /** @psalm-suppress MissingThrowsDocblock */
+        $this->rules[$attributeName]->merge($rules);
     }
 
     /**
